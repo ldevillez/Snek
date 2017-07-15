@@ -7,6 +7,7 @@
 #include <SFML/Graphics.hpp>
 #include "CONST.h"
 #include "math.h"
+#include "fun.h"
 
 using namespace sf;
 using namespace std;
@@ -25,13 +26,9 @@ class Snake
       Position GetPos(int a);
       int getSize();
       void set();
-      /*
-      bool contains(Position a);
-      int getSize();
-      Position GetPos(int a);
       Position getNewPos();
-      */
       void draw();
+      Position tryAdd(int direction);
 
     private:
       Snek *Pos;

@@ -165,3 +165,39 @@ void  Snake::set()
   kek.x = 24;
   this->add(kek,2);
 }
+
+Position Snake::getNewPos()
+{
+  Position a;
+  do {
+    a.x = RandomInt(0,width/size_Snake-1);
+    a.y = RandomInt(0,height/size_Snake-1);
+  } while(this->contains(a));
+  return a;
+}
+
+Position Snake::tryAdd(int direction)
+{
+  Position old = Pos[first].pos;
+  int direction_old = Pos[first].direction;
+
+if((direction + direction_old) %2 == 0)
+  direction = direction_old;
+
+
+  switch (direction) {
+    case 0:
+      old.x --;
+    break;
+    case 1:
+      old.y --;
+    break;
+    case 2:
+      old.x++;
+    break;
+    case 3:
+      old.y ++;
+    break;
+  }
+  return old;
+}

@@ -11,10 +11,17 @@ Game::Game(RenderWindow* window)
     cout << "Fond not found" << endl;
   }
   Background.setTexture(Fond);
+  if(!pom.loadFromFile("img/snake.png"))
+  {
+    cout << "snake not found" << endl;
+  }
+  apple.setTexture(pom);
+  apple.setTextureRect(IntRect(0,100,25,25));
   direction = 2;
   finished = 0;
   nbObstacle = 0;
   this->makeObstacle();
+  snake = new Snake(window);
 }
 
 Game::~Game()
@@ -44,23 +51,34 @@ int Game::getEvent()
 void Game::create()
 {
   finished = 0;
-  snake = new Snake(window);
   snake->set();
+  Pomme = this->getNewPomme();
+  apple.setOrigin(-Pomme.x *25,-Pomme.y *25);
 }
 
 int Game::update()
 {
-  std::cout << nbObstacle << '\n';
-  int i = snake->add(direction);
-  for(int j = 0; j < nbObstacle; j++)
+
+  Position a = snake->tryAdd(direction);
+  if(posEqual(a,Pomme))
   {
-    i += snake->contains(obstacle[j]);
+    snake->add(direction);
+    Pomme = this->getNewPomme();
+    apple.setOrigin(-Pomme.x *25,-Pomme.y *25);
   }
+  else
+  {
+    int i = snake->add(direction);
+    for(int j = 0; j < nbObstacle; j++)
+    {
+      i += snake->contains(obstacle[j]);
+    }
 
-  if (i > 0)
-    finished = 1;
+    if (i > 0)
+      finished = 1;
 
-  snake->remove();
+    snake->remove();
+  }
   return snake->getSize();
 }
 
@@ -72,6 +90,7 @@ int Game::isNotFinished()
 void Game::draw()
 {
   window->draw(Background);
+  window->draw(apple);
   snake->draw();
 }
 
@@ -80,7 +99,6 @@ void Game::makeObstacle()
 
   for(int i = 0; i < nWidth+2;i++)
   {
-    std::cout << nbObstacle << '\n';
     obstacle[nbObstacle].x = -1 + i;
     obstacle[nbObstacle].y = 0;
     nbObstacle ++;
@@ -90,7 +108,6 @@ void Game::makeObstacle()
   }
   for(int i = 0; i < nHeight;i++)
   {
-    std::cout << nbObstacle << '\n';
     obstacle[nbObstacle].x = 0;
     obstacle[nbObstacle].y = -1+i;
     nbObstacle ++;
@@ -98,4 +115,24 @@ void Game::makeObstacle()
     obstacle[nbObstacle].y = -1+i;
     nbObstacle ++;
   }
+}
+
+int Game::isObstacle(Position a)
+{
+  for(int i = 0; i < nbObstacle ; i++)
+  {
+    if(a.x == obstacle[i].x && a.y == obstacle[i].y)
+      return 1;
+  }
+  return 0;
+}
+
+Position Game::getNewPomme()
+{
+  Position a;
+  do
+  {
+    a = snake->getNewPos();
+  } while(isObstacle(a));
+  return a;
 }

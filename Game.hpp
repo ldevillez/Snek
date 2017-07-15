@@ -21,17 +21,20 @@ class Game
       int update();
       int isNotFinished();
       void makeObstacle();
+      Position getNewPomme();
+      int isObstacle(Position a);
 
 
     private:
-    Texture Fond;
-    Sprite Background;
+    Texture Fond, pom;
+    Sprite Background,apple;
     RenderWindow* window;
     Snake* snake;
     int direction;
     int finished;
     Position obstacle[500];
     int nbObstacle;
+    Position Pomme;
 };
 
 #endif

@@ -21,7 +21,7 @@ int main()
     string sc = "score: ", leng;
 
     score.setStyle(sf::Text::Bold);
-    score.setColor(sf::Color::Red);
+    //score.setColor(sf::Color::Red);
     score.move(500,500);
 
     Time actionTime = milliseconds(150);
@@ -45,7 +45,7 @@ int main()
         break;
         case 1:
         game.create();
-        
+
           while (game.getEvent()&&game.isNotFinished()) {
             if(operator<(actionTime,clock.getElapsedTime()))
             {

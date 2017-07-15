@@ -4,8 +4,8 @@ test:
 	make clean;
 
 build:
-	g++ -c *.cpp -I../include -std=c++11;
-	g++ *.o -o sfml-app -L../lib -lsfml-audio -lsfml-graphics -lsfml-window -lsfml-system;
+	g++ -c *.cpp -I../SFML-2.4.2/include -std=c++11;
+	g++ *.o -o sfml-app -L../SFML-2.4.2/lib -lsfml-audio -lsfml-graphics -lsfml-window -lsfml-system;
 
 
 run:
