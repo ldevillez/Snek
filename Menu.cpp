@@ -51,6 +51,8 @@ int Menu::getEvent()
   if((299 <= localPosition.x && localPosition.x <=899) && (500<=localPosition.y&&localPosition.y <=659))
   {
     Button2.setTextureRect(IntRect(600,149,599,149));
+    if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+      ret = 3;
   }
   else
   {

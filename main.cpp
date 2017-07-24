@@ -44,7 +44,7 @@ int main()
           window.display();
         break;
         case 1:
-        game.create();
+          game.create(1);
 
           while (game.getEvent()&&game.isNotFinished()) {
             if(operator<(actionTime,clock.getElapsedTime()))
@@ -61,7 +61,6 @@ int main()
             choice = 2;
             clock.restart();
           }
-
           else
           choice = 0;
         break;
@@ -70,9 +69,44 @@ int main()
         score.setString(sc + leng);
           window.draw(score);
           window.display();
-          if(clock.getElapsedTime().asSeconds() > 3)
+          while(clock.getElapsedTime().asSeconds() < 3) {
+
+          }
           choice = 0;
         break;
+
+        case 3:
+        game.create(2);
+
+          while (game.getEvent()&&game.isNotFinished()) {
+            if(operator<(actionTime,clock.getElapsedTime()))
+            {
+              clock.restart();
+              leng = to_string(game.update());
+              window.clear();
+              game.draw();
+              window.display();
+            }
+          }
+          if(!game.isNotFinished())
+          {
+            choice = 2;
+            clock.restart();
+          }
+          else
+          choice = 0;
+        break;
+
+        case 4:
+        score.setString(sc + leng);
+          window.draw(score);
+          window.display();
+          while(clock.getElapsedTime().asSeconds() < 3) {
+
+          }
+          choice = 0;
+        break;
+
 
         default:
           window.close();

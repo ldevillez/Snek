@@ -17,7 +17,7 @@ using namespace std;
 class Snake
 {
     public:
-      Snake(RenderWindow* window);
+      Snake(RenderWindow* window,int color);
       ~Snake();
       int add(Position a,int direction);
       int add(int direction);
@@ -25,10 +25,11 @@ class Snake
       bool contains(Position a);
       Position GetPos(int a);
       int getSize();
-      void set();
+      void set(int player);
       Position getNewPos();
       void draw();
       Position tryAdd(int direction);
+      void shout();
 
     private:
       Snek *Pos;

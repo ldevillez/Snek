@@ -4,7 +4,7 @@
 using namespace sf;
 using namespace std;
 
-Snake::Snake(RenderWindow *window)
+Snake::Snake(RenderWindow *window, int color)
 {
   number = 500;
   Pos = (Snek*) malloc(sizeof(Snek) * number);
@@ -13,9 +13,19 @@ Snake::Snake(RenderWindow *window)
   last = 0;
 
   this->window = window;
-  if(!SerpentTexture.loadFromFile("img/snake.png"))
+  if(color == 1)
   {
-    cout << "snake not found" << endl;
+    if(!SerpentTexture.loadFromFile("img/snake.png"))
+    {
+      cout << "snake not found" << endl;
+    }
+  }
+  else
+  {
+    if(!SerpentTexture.loadFromFile("img/snake2.png"))
+    {
+      cout << "snake not found" << endl;
+    }
   }
 
   corps.setTexture(SerpentTexture);
@@ -150,20 +160,39 @@ int Snake::getSize()
   return size;
 }
 
-void  Snake::set()
+void  Snake::set(int player)
 {
-  for(int i =0;i < size ;)
+  first = 2;
+  last = 0;
+  size = 3;
+  if(player == 1)
   {
-    this->remove();
+    Position kek;
+    kek.x = 22;
+    kek.y = 19;
+    Pos[0].direction = 2;
+    Pos[0].pos = kek;
+    kek.x = 23;
+    Pos[1].direction = 2;
+    Pos[1].pos = kek;
+    kek.x = 24;
+    Pos[2].direction = 2;
+    Pos[2].pos = kek;
   }
-  Position kek;
-  kek.x = 22;
-  kek.y = 19;
-  this->add(kek,2);
-  kek.x = 23;
-  this->add(kek,2);
-  kek.x = 24;
-  this->add(kek,2);
+  else
+  {
+    Position kek;
+    kek.x = 24;
+    kek.y = 21;
+    Pos[0].direction = 0;
+    Pos[0].pos = kek;
+    kek.x = 23;
+    Pos[1].direction = 0;
+    Pos[1].pos = kek;
+    kek.x = 22;
+    Pos[2].direction = 0;
+    Pos[2].pos = kek;
+  }
 }
 
 Position Snake::getNewPos()
@@ -200,4 +229,13 @@ if((direction + direction_old) %2 == 0)
     break;
   }
   return old;
+}
+
+void Snake::shout()
+{
+  for(int i =0; i < size;i++)
+  {
+    std::cout << Pos[(i+last)%number].direction << " ";
+  }
+  cout << endl;
 }

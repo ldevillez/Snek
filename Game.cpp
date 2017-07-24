@@ -11,17 +11,17 @@ Game::Game(RenderWindow* window)
     cout << "Fond not found" << endl;
   }
   Background.setTexture(Fond);
-  if(!pom.loadFromFile("img/snake.png"))
+  if(!pom.loadFromFile("img/pomme.png"))
   {
     cout << "snake not found" << endl;
   }
   apple.setTexture(pom);
-  apple.setTextureRect(IntRect(0,100,25,25));
   direction = 2;
   finished = 0;
   nbObstacle = 0;
   this->makeObstacle();
-  snake = new Snake(window);
+  snake = new Snake(window,1);
+  snake2 = new Snake(window,2);
 }
 
 Game::~Game()
@@ -45,38 +45,66 @@ int Game::getEvent()
   else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
     direction = 3;
 
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
+      direction2 = 0;
+
+    else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Z))
+      direction2 = 1;
+
+    else if(sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+      direction2 = 2;
+
+    else if(sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+      direction2 = 3;
+
   return 1-sf::Keyboard::isKeyPressed(sf::Keyboard::Escape);
 }
 
-void Game::create()
+void Game::create(int player)
 {
+  this->player = player;
   finished = 0;
-  snake->set();
+  snake->set(1);
+  direction = 2;
+  if(player == 2)
+  {
+    snake2->set(2);
+    direction2 = 0;
+  }
   Pomme = this->getNewPomme();
   apple.setOrigin(-Pomme.x *25,-Pomme.y *25);
 }
 
 int Game::update()
 {
-
   Position a = snake->tryAdd(direction);
+  Position b = snake2->tryAdd(direction2);
   if(posEqual(a,Pomme))
   {
     snake->add(direction);
     Pomme = this->getNewPomme();
     apple.setOrigin(-Pomme.x *25,-Pomme.y *25);
   }
+  else if (posEqual(b,Pomme))
+  {
+    snake2->add(direction2);
+    Pomme = this->getNewPomme();
+    apple.setOrigin(-Pomme.x *25,-Pomme.y *25);
+  }
   else
   {
     int i = snake->add(direction);
+    i += snake2->add(direction2);
     for(int j = 0; j < nbObstacle; j++)
     {
       i += snake->contains(obstacle[j]);
+      i += snake2->contains(obstacle[j]);
     }
 
     if (i > 0)
       finished = 1;
 
+    snake->remove();
     snake->remove();
   }
   return snake->getSize();
@@ -92,6 +120,8 @@ void Game::draw()
   window->draw(Background);
   window->draw(apple);
   snake->draw();
+  if (player == 2)
+    snake2->draw();
 }
 
 void Game::makeObstacle()
@@ -130,9 +160,13 @@ int Game::isObstacle(Position a)
 Position Game::getNewPomme()
 {
   Position a;
+  bool Snek2Contain = true;
   do
   {
     a = snake->getNewPos();
-  } while(isObstacle(a));
+    if(player == 2)
+      Snek2Contain = snake2->contains(a);
+
+  } while(isObstacle(a) || Snek2Contain);
   return a;
 }

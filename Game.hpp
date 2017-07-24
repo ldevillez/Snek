@@ -16,8 +16,9 @@ class Game
       Game(RenderWindow* window);
       ~Game();
       int getEvent();
+      int getEvent2();
       void draw();
-      void create();
+      void create(int player);
       int update();
       int isNotFinished();
       void makeObstacle();
@@ -30,11 +31,14 @@ class Game
     Sprite Background,apple;
     RenderWindow* window;
     Snake* snake;
+    Snake* snake2;
     int direction;
+    int direction2;
     int finished;
     Position obstacle[500];
     int nbObstacle;
     Position Pomme;
+    int player;
 };
 
 #endif
