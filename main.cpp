@@ -50,62 +50,33 @@ int main()
             if(operator<(actionTime,clock.getElapsedTime()))
             {
               clock.restart();
-              leng = to_string(game.update());
               window.clear();
               game.draw();
               window.display();
+              leng = to_string(game.update());
             }
           }
-          if(!game.isNotFinished())
-          {
-            choice = 2;
-            clock.restart();
-          }
-          else
+          game.showScore();
           choice = 0;
         break;
 
         case 2:
-        score.setString(sc + leng);
-          window.draw(score);
-          window.display();
-          while(clock.getElapsedTime().asSeconds() < 3) {
-
-          }
-          choice = 0;
-        break;
-
-        case 3:
         game.create(2);
 
           while (game.getEvent()&&game.isNotFinished()) {
             if(operator<(actionTime,clock.getElapsedTime()))
             {
               clock.restart();
-              leng = to_string(game.update());
               window.clear();
               game.draw();
               window.display();
+              game.update();
             }
           }
-          if(!game.isNotFinished())
-          {
-            choice = 2;
-            clock.restart();
-          }
-          else
+          game.showScore();
           choice = 0;
         break;
 
-        case 4:
-        score.setString(sc + leng);
-          window.draw(score);
-          window.display();
-          while(clock.getElapsedTime().asSeconds() < 3) {
-
-          }
-          choice = 0;
-        break;
 
 
         default:

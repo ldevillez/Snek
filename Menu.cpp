@@ -52,7 +52,7 @@ int Menu::getEvent()
   {
     Button2.setTextureRect(IntRect(600,149,599,149));
     if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
-      ret = 3;
+      ret = 2;
   }
   else
   {

@@ -5,6 +5,7 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include "Snake.h"
+#include <string>
 
 using namespace sf;
 using namespace std;
@@ -24,6 +25,7 @@ class Game
       void makeObstacle();
       Position getNewPomme();
       int isObstacle(Position a);
+      void showScore();
 
 
     private:
@@ -39,6 +41,7 @@ class Game
     int nbObstacle;
     Position Pomme;
     int player;
+    int score, score2;
 };
 
 #endif

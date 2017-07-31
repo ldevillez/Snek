@@ -66,10 +66,12 @@ void Game::create(int player)
   finished = 0;
   snake->set(1);
   direction = 2;
+  score = 0;
   if(player == 2)
   {
     snake2->set(2);
     direction2 = 0;
+    score2 = 0;
   }
   Pomme = this->getNewPomme();
   apple.setOrigin(-Pomme.x *25,-Pomme.y *25);
@@ -77,37 +79,72 @@ void Game::create(int player)
 
 int Game::update()
 {
-  Position a = snake->tryAdd(direction);
-  Position b = snake2->tryAdd(direction2);
-  if(posEqual(a,Pomme))
+  if(player == 1)
   {
-    snake->add(direction);
-    Pomme = this->getNewPomme();
-    apple.setOrigin(-Pomme.x *25,-Pomme.y *25);
-  }
-  else if (posEqual(b,Pomme))
-  {
-    snake2->add(direction2);
-    Pomme = this->getNewPomme();
-    apple.setOrigin(-Pomme.x *25,-Pomme.y *25);
+    Position a = snake->tryAdd(direction);
+    if(posEqual(a,Pomme))
+    {
+      score ++;
+      snake->add(direction);
+      Pomme = this->getNewPomme();
+      apple.setOrigin(-Pomme.x *25,-Pomme.y *25);
+    }
+    else
+    {
+      int i = snake->add(direction);
+
+      for(int j = 0; j < nbObstacle; j++)
+      {
+        i += snake->contains(obstacle[j]);
+      }
+
+      if (i > 0)
+        finished = 1;
+
+      snake->remove();
+    }
+    return snake->getSize();
   }
   else
   {
-    int i = snake->add(direction);
-    i += snake2->add(direction2);
-    for(int j = 0; j < nbObstacle; j++)
+    Position a = snake->tryAdd(direction);
+    Position b = snake2->tryAdd(direction2);
+    if(posEqual(a,Pomme))
     {
-      i += snake->contains(obstacle[j]);
-      i += snake2->contains(obstacle[j]);
+      score++;
+      snake->add(direction);
+      Pomme = this->getNewPomme();
+      apple.setOrigin(-Pomme.x *25,-Pomme.y *25);
     }
-
-    if (i > 0)
+    else if (posEqual(b,Pomme))
+    {
+      score2++;
+      snake2->add(direction2);
+      Pomme = this->getNewPomme();
+      apple.setOrigin(-Pomme.x *25,-Pomme.y *25);
+    }
+    else if(snake->contains(b)||snake2->contains(a)||posEqual(a,b))
+    {
       finished = 1;
+    }
+    else
+    {
+      int i = snake->add(direction);
+      i += snake2->add(direction2);
+      for(int j = 0; j < nbObstacle; j++)
+      {
+        i += snake->contains(obstacle[j]);
+        i += snake2->contains(obstacle[j]);
+      }
 
-    snake->remove();
-    snake->remove();
+      if (i > 0)
+        finished = 1;
+
+      snake->remove();
+      snake2->remove();
+    }
+    return snake->getSize();
   }
-  return snake->getSize();
 }
 
 int Game::isNotFinished()
@@ -160,7 +197,7 @@ int Game::isObstacle(Position a)
 Position Game::getNewPomme()
 {
   Position a;
-  bool Snek2Contain = true;
+  bool Snek2Contain = false;
   do
   {
     a = snake->getNewPos();
@@ -169,4 +206,25 @@ Position Game::getNewPomme()
 
   } while(isObstacle(a) || Snek2Contain);
   return a;
+}
+
+void Game::showScore()
+{
+  Clock clock;
+  sf::Font font;
+  font.loadFromFile("arial.ttf");
+  Text sco("score",font,30);
+  sco.setStyle(sf::Text::Bold);
+  //score.setColor(sf::Color::Red);
+  sco.move(500,500);
+
+  if(player == 1)
+  sco.setString("score: " +  to_string(score));
+  else
+  sco.setString("score 1: " +  to_string(score) +"\n score 2: " + to_string(score2));
+  window->draw(sco);
+  window->display();
+  while(clock.getElapsedTime().asSeconds() < 3) {
+
+  }
 }
